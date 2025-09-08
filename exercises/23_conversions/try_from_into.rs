@@ -28,14 +28,44 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
 
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        Ok(Color {
+            red: match u8::try_from(tuple.0) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+            green: match u8::try_from(tuple.1) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+            blue: match u8::try_from(tuple.2) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+        })
+    }
 }
 
 // TODO: Array implementation.
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        Ok(Color {
+            red: match u8::try_from(arr[0]) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+            green: match u8::try_from(arr[1]) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+            blue: match u8::try_from(arr[2]) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+        })
+    }
 }
 
 // TODO: Slice implementation.
@@ -43,7 +73,25 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        }
+        Ok(Color {
+            red: match u8::try_from(slice[0]) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+            green: match u8::try_from(slice[1]) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+            blue: match u8::try_from(slice[2]) {
+                Ok(v) => v,
+                Err(_) => return Err(IntoColorError::IntConversion),
+            },
+        })
+    }
 }
 
 fn main() {
